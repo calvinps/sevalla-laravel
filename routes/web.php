@@ -24,13 +24,13 @@ function cpuHash(int $iter, string $algo = 'sha512'): string {
     return 'took '.microtime(true) - $start.' seconds';
 }
 
-function memUsage(int $mb): void {
+function memUsage(int $mb, int $sleep): void {
     $allocated= [];
     for ($i = 0; $i < $mb; $i++) {
         $allocated[] = str_repeat('A', 1024 * 1024);
     }
     defer(function(){
-      sleep(2);
+      sleep($sleep);
       unset($allocated);
     });
 }
@@ -48,7 +48,8 @@ Route::get('/cpu', function (Request $request) {
 
 Route::get('/mem', function (Request $request) {
   $mb = (int) $request->query('mb', 50);
-  memUsage($mb);
+  $sleep = (int) $request->query('sleep', 2);
+  memUsage($mb, $sleep);
 
   return response()->json(['message' => "Memory"]);
 });
