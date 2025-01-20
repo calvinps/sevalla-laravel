@@ -29,10 +29,10 @@ function memUsage(int $mb, int $sleep): void {
     for ($i = 0; $i < $mb; $i++) {
         $allocated[] = str_repeat('A', 1024 * 1024);
     }
-    defer(function(){
+    // defer(function(){
       sleep($sleep);
       unset($allocated);
-    });
+    // });
 }
 
 Route::get('/', function () {
